@@ -1,58 +1,25 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import '../css/Event.css'
 
 const Event = (props) => {
 
-    const [event, setEvent] = useState([])
-    const [time, setTime] = useState([])
-    const [remaining, setRemaining] = useState([])
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const eventData = await EventsAPI.getEventsById(props.id)
-                setEvent(eventData)
-            }
-            catch (error) {
-                throw error
-            }
-        }) ()
-    }, [])
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const result = await dates.formatTime(event.time)
-                setTime(result)
-            }
-            catch (error) {
-                throw error
-            }
-        }) ()
-    }, [event])
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const timeRemaining = await dates.formatRemainingTime(event.remaining)
-                setRemaining(timeRemaining)
-                dates.formatNegativeTimeRemaining(remaining, event.id)
-            }
-            catch (error) {
-                throw error
-            }
-        }) ()
-    }, [event])
+    // event_date comes from the API as a timestamp string, e.g. "2026-07-15T09:00:00.000Z"
+    const eventDate = props.event_date ? new Date(props.event_date) : null
+    const date = eventDate ? eventDate.toLocaleDateString() : ''
+    const time = eventDate
+        ? eventDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+        : ''
 
     return (
         <article className='event-information'>
-            <img src={event.image} />
+            <img src={props.image} alt={props.name} />
 
             <div className='event-information-overlay'>
                 <div className='text'>
-                    <h3>{event.title}</h3>
-                    <p><i className="fa-regular fa-calendar fa-bounce"></i> {event.date} <br /> {time}</p>
-                    <p id={`remaining-${event.id}`}>{remaining}</p>
+                    <h3>{props.name}</h3>
+                    <p>{props.company}</p>
+                    <p><i className="fa-regular fa-calendar fa-bounce"></i> {date} <br /> {time}</p>
+                    <p>{props.description}</p>
                 </div>
             </div>
         </article>

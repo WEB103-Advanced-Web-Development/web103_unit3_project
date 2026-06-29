@@ -1,4 +1,7 @@
+import dotenv from "dotenv";
 import { pool } from "./database.js";
+
+dotenv.config();
 
 // --- Sample data: a Virtual Career Tech Fair ---
 
