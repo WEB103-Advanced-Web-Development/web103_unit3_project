@@ -1,7 +1,13 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getCompanyImage } from '../assets/companyImages'
 import '../css/Event.css'
 
 const Event = (props) => {
+
+    const navigate = useNavigate()
+
+    const image = getCompanyImage(props.company, props.image)
 
     // event_date comes from the API as a timestamp string, e.g. "2026-07-15T09:00:00.000Z"
     const eventDate = props.event_date ? new Date(props.event_date) : null
@@ -11,8 +17,8 @@ const Event = (props) => {
         : ''
 
     return (
-        <article className='event-information'>
-            <img src={props.image} alt={props.name} />
+        <article className='event-information' onClick={() => navigate(`/events/${props.id}`)} style={{ cursor: 'pointer' }}>
+            <img src={image} alt={props.name} />
 
             <div className='event-information-overlay'>
                 <div className='text'>

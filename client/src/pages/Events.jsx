@@ -1,40 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import LocationsAPI from '../services/LocationsAPI'
+import EventsAPI from '../services/EventsAPI'
 import Event from '../components/Event'
 import '../css/LocationEvents.css'
 
-const LocationEvents = () => {
-    const { id } = useParams()
-    const [location, setLocation] = useState({})
+const Events = () => {
     const [events, setEvents] = useState([])
 
     useEffect(() => {
         (async () => {
             try {
-                const locationData = await LocationsAPI.getLocationById(id)
-                setLocation(locationData)
-
-                const eventsData = await LocationsAPI.getLocationEvents(id)
+                const eventsData = await EventsAPI.getAllEvents()
                 setEvents(eventsData)
             }
             catch (error) {
                 throw error
             }
         })()
-    }, [id])
+    }, [])
 
     return (
         <div className='location-events'>
             <header>
-                <div className='location-image'>
-                    <img src={location.image} alt={location.name} />
-                </div>
-
                 <div className='location-info'>
-                    <h2>{location.name}</h2>
-                    <p>{location.description}</p>
-                    <p>Capacity: {location.capacity}</p>
+                    <h2>All Events</h2>
+                    <p>Every event happening across all locations</p>
                 </div>
             </header>
 
@@ -50,11 +39,11 @@ const LocationEvents = () => {
                             event_date={event.event_date}
                             image={event.image}
                         />
-                    ) : <h2><i className="fa-regular fa-calendar-xmark fa-shake"></i> {'No events scheduled at this location yet!'}</h2>
+                    ) : <h2><i className="fa-regular fa-calendar-xmark fa-shake"></i> {'No events scheduled yet!'}</h2>
                 }
             </main>
         </div>
     )
 }
 
-export default LocationEvents
+export default Events
